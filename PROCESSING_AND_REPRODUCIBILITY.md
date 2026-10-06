@@ -8,20 +8,20 @@ This document describes the data-processing and statistical-analysis workflow fo
 
 It supplements the repository `README.md` and data dictionary by documenting:
 
-- the relationship between the secure source data and the deposited analysis dataset;
-- preprocessing performed before creation of the deposited dataset;
+- the relationship between the secure source data and the analysis dataset;
+- preprocessing performed before creation of the analysis dataset;
 - historical predictor screening and variable selection;
-- the analyses that can be reproduced from the deposited dataset;
+- the analyses that can be reproduced from the analysis dataset;
 - handling of missing data and special statistical cases; and
-- aspects of the original research workflow that cannot be independently reconstructed from the deposited dataset.
+- aspects of the original research workflow that cannot be independently reconstructed from the analysis dataset.
 
 The public reproducibility workflow begins with:
 
 `data/gimpid_clean.csv`
 
-The deposited dataset contains 124 observations and 81 variables: 79 eligible clinical and laboratory predictors, the molecular diagnosis outcome, and the IUIS classification variable.
+The analysis dataset contains 124 observations and 81 variables: 79 eligible clinical and laboratory predictors, the molecular diagnosis outcome, and the IUIS classification variable.
 
-No participant identifier is included in the deposited dataset.
+No participant identifier is included in the analysis dataset.
 
 ---
 
@@ -31,11 +31,11 @@ This was a retrospective single-center study of patients evaluated at the Adult 
 
 Patients were eligible if genetic testing had been performed as part of the evaluation of a clinically diagnosed inborn error of immunity (IEI) before 2025.
 
-A total of 153 patients were considered during the study period. After exclusion of patients who declined participation or could not be contacted, 124 patients were included in the final study cohort.
+Among 976 patients attending the adult IEI clinic, 153 underwent genetic testing based on clinical suspicion of an underlying monogenic disorder. After exclusion of patients who declined participation or could not be contacted, 124 patients were included in the final study cohort.
 
 Clinical symptoms, laboratory results, microbiological findings, and radiological data were extracted retrospectively from electronic medical records. Investigations were performed as part of routine clinical care.
 
-The deposited dataset represents the final analytic cohort. Source-data extraction, cohort assembly, and handling of identifiable clinical information occurred within the secure research environment and are not reproduced in the public repository.
+The analysis dataset represents the final analytic cohort. Source-data extraction, cohort assembly, and handling of identifiable clinical information occurred within the secure research environment and are not reproduced in the public repository.
 
 ---
 
@@ -43,11 +43,11 @@ The deposited dataset represents the final analytic cohort. Source-data extracti
 
 The primary study outcome was achievement of a molecular diagnosis.
 
-In the deposited dataset, the source variable is:
+In the analysis dataset, the source variable is:
 
 `Relevant genetics`
 
-A molecular diagnosis was defined as identification of a pathogenic or likely pathogenic variant considered sufficient to explain the patient's clinical phenotype.
+A molecular diagnosis was defined as identification of a pathogenic or likely pathogenic variant (ACMG class 4 or 5) considered sufficient to explain the patient's clinical phenotype.
 
 Variants of uncertain significance and incidental findings were not considered diagnostic.
 
@@ -60,11 +60,11 @@ The final cohort contains:
 
 ---
 
-## 3. Secure preprocessing and creation of the deposited dataset
+## 3. Secure preprocessing and creation of the analysis dataset
 
-The deposited analysis dataset was generated from secure study source data using a preprocessing workflow that is not included in the public GitHub repository.
+The analysis dataset was generated from secure study source data using a preprocessing workflow that is not included in the public GitHub repository.
 
-The private preprocessing workflow performed operations required before release of the analysis dataset, including:
+The private preprocessing workflow performed operations required before creation of the analysis dataset, including:
 
 - removal of direct and internal identifiers;
 - harmonization of data types;
@@ -73,11 +73,11 @@ The private preprocessing workflow performed operations required before release 
 - handling of selected non-numeric laboratory entries;
 - removal of variables not required for the reproducible analyses;
 - incorporation of IUIS classification; and
-- creation of the final analysis-ready release dataset.
+- creation of the final analysis-ready dataset.
 
-The private preprocessing code is not required to reproduce the statistical analyses from the deposited dataset and is not distributed because it operates on secure source data that are not part of the research data package.
+The private preprocessing code is not required to reproduce the statistical analyses from the analysis dataset and is not distributed because it operates on secure source data that are not part of the public research package.
 
-The resulting deposited dataset is:
+The resulting analysis dataset is:
 
 `data/gimpid_clean.csv`
 
@@ -89,7 +89,7 @@ It contains:
 - 1 molecular diagnosis outcome variable; and
 - 1 IUIS classification variable.
 
-Historical source-variable names have generally been retained in the deposited dataset to preserve correspondence with the original analyses. More descriptive definitions are provided in the accompanying data dictionary.
+Historical source-variable names have generally been retained in the analysis dataset to preserve correspondence with the original analyses. More descriptive definitions are provided in the accompanying data dictionary.
 
 ---
 
@@ -120,17 +120,17 @@ This resulted in 79 eligible predictors.
 
 ### 4.2 Reproducibility boundary for the 109-to-79 screening step
 
-The deposited dataset contains the **79 eligible predictors**, not all 109 variables considered during the historical screening stage.
+The analysis dataset contains the **79 eligible predictors**, not all 109 variables considered during the historical screening stage.
 
-Consequently, the public analysis workflow documents the historical reduction from 109 to 79 predictors but cannot independently recompute all exclusions from the deposited dataset.
+Consequently, the public analysis workflow documents the historical reduction from 109 to 79 predictors but cannot independently recompute all exclusions from the analysis dataset.
 
-In particular, variables excluded because of complement status, excessive missingness, or absence of variability are generally not retained in the release dataset.
+In particular, variables excluded because of complement status, excessive missingness, or absence of variability are generally not retained in the analysis dataset.
 
 The public variable-selection script therefore treats the 109-to-79 screening as a documented historical preprocessing step.
 
-As an integrity check, the public workflow verifies that all 79 expected eligible predictors are present in the deposited dataset and evaluates missingness among those released predictors.
+As an integrity check, the public workflow verifies that all 79 expected eligible predictors are present in the analysis dataset and evaluates missingness among those predictors.
 
-The subsequent predictor-prioritization workflow beginning with the 79 eligible predictors can be reproduced from the deposited data.
+The subsequent predictor-prioritization workflow beginning with the 79 eligible predictors can be reproduced from the analysis dataset.
 
 ---
 
@@ -171,7 +171,7 @@ Predictor prioritization was performed within clinical domains using LASSO logis
 
 The purpose of this stage was variable prioritization rather than construction of the final inferential model solely through an automated selection procedure.
 
-The public implementation reconstructs this domain-based prioritization using the 79 eligible predictors in the deposited dataset.
+The public implementation reconstructs this domain-based prioritization using the 79 eligible predictors in the analysis dataset.
 
 The historical prioritization identified 22 candidate predictors for further consideration:
 
@@ -285,7 +285,7 @@ The sensitivity analyses are implemented in:
 
 `06_sensitivity_analyses.R`
 
-IUIS classification in the deposited dataset is used to derive the PAD/non-PAD grouping.
+IUIS classification in the analysis dataset is used to derive the PAD/non-PAD grouping.
 
 ---
 
@@ -314,11 +314,11 @@ Complete-case data are used separately for each univariable model, so the analys
 
 ## 11. Missing data
 
-Missing data are represented as missing values when imported into R.
+Missing values are stored as blank fields in the CSV file and are read as `NA` by the analysis workflow.
 
 The historical predictor-screening criterion excluded candidate predictors with more than 20% missing observations.
 
-All 79 predictors retained in the deposited dataset satisfy this eligibility criterion.
+All 79 predictors retained in the analysis dataset satisfy this eligibility criterion.
 
 No statistical imputation is performed in the public analysis workflow.
 
@@ -336,9 +336,9 @@ Laboratory measurements were obtained as part of routine clinical care.
 
 Serum IgG, IgA, IgM, and IgG subclasses were measured using the Optilite turbidimetric platform. Immunoglobulin measurements were obtained before initiation of immunoglobulin replacement therapy whenever applicable.
 
-The deposited dataset retains the original analysis measurement scales.
+The analysis dataset retains the original analysis measurement scales.
 
-The data dictionary documents the units and interpretation of the released laboratory variables.
+The data dictionary documents the units and interpretation of the laboratory variables.
 
 The historical source variable:
 
@@ -354,10 +354,10 @@ Peripheral blood lymphocyte subsets were assessed using multiparameter flow cyto
 
 Clinical manifestations were grouped into seven descriptive domains for visualization:
 
-- bacterial/fungal infections;
-- viral infections;
+- bacterial/fungal manifestations;
+- viral manifestations;
 - atopy;
-- lymphoproliferation;
+- lymphoproliferation/immune dysregulation;
 - autoimmunity;
 - malignancy; and
 - autoinflammation.
@@ -378,7 +378,7 @@ The heatmap is descriptive and does not determine inclusion of variables in the 
 
 ## 14. IUIS classification and diagnostic yield
 
-IUIS classification is included in the deposited dataset as:
+IUIS classification is included in the analysis dataset as:
 
 `iuis_category`
 
@@ -388,7 +388,7 @@ Diagnostic yield according to IUIS classification is calculated in:
 
 This classification is also used to define PAD status for the sensitivity analyses.
 
-Individual gene and disease labels are not required for these analyses and are not included in the deposited analysis dataset.
+Individual gene and disease labels are not required for these analyses and are not included in the analysis dataset.
 
 ---
 
@@ -419,7 +419,7 @@ The public scripts should be run sequentially from a clean R session:
 9. `09_figure4_forest_plot.R`
 10. `10_univariable_analyses.R`
 
-The scripts have been tested sequentially in this order using the deposited analysis dataset.
+The scripts have been tested sequentially in this order using the analysis dataset.
 
 The first script reads:
 
@@ -437,9 +437,9 @@ Generated figures and analysis outputs are written to the output locations defin
 
 ## 17. Reproducibility scope
 
-The repository is intended to reproduce the analyses that can be performed from the deposited analysis dataset.
+The repository is intended to reproduce the analyses that can be performed from the analysis dataset.
 
-The following components are reproducible from the deposited data:
+The following components are reproducible from the analysis dataset:
 
 - descriptive cohort analyses;
 - construction of the reported clinical manifestation domains;
@@ -453,29 +453,29 @@ The following components are reproducible from the deposited data:
 - the adjusted forest plot; and
 - univariable analyses of the 79 eligible predictors.
 
-The following components precede the deposited dataset and are therefore documented rather than independently reproducible from the public research package:
+The following components precede the analysis dataset and are therefore documented rather than independently reproducible from the public research package:
 
 - extraction of information from electronic medical records;
 - source-data cleaning and harmonization;
 - cohort assembly within the secure research environment;
 - removal of direct and internal identifiers;
-- the complete historical screening from 109 candidate predictors to 79 eligible predictors, because excluded variables are not included in the deposited dataset;
+- the complete historical screening from 109 candidate predictors to 79 eligible predictors, because excluded variables are not included in the analysis dataset;
 - linkage of secure study identifiers to IUIS classification before removal of those identifiers; and
 - analyses requiring individual gene, variant, or disease labels that are not necessary for reproduction of the predictor analyses.
 
-This distinction is intentional. The deposited dataset contains the information required to audit and reproduce the reported statistical predictor analyses without distributing source variables or identifiers that are unnecessary for that purpose.
+This distinction is intentional. The analysis dataset contains the information required to audit and reproduce the reported statistical predictor analyses without distributing source variables or identifiers that are unnecessary for that purpose.
 
 ---
 
 ## 18. Confidentiality and data access
 
-The deposited dataset contains detailed clinical research information from a relatively small cohort of individuals evaluated for IEI.
+The analysis dataset contains detailed clinical research information from a relatively small cohort of individuals evaluated for IEI.
 
-Direct and internal identifiers have been removed from the deposited dataset. However, combinations of clinical characteristics may remain sensitive.
+Direct and internal identifiers have been removed from the analysis dataset. However, combinations of clinical characteristics may remain sensitive.
 
 The dataset should therefore not be described as anonymous solely on the basis of identifier removal.
 
-Access conditions, disclosure controls, and permitted reuse are determined by the KI Data Repository and the conditions associated with the final dataset record.
+The clinical dataset is not distributed through this GitHub repository.
 
 The public analysis code does not require participant identifiers.
 
@@ -483,11 +483,11 @@ The public analysis code does not require participant identifiers.
 
 ## 19. Data dictionary
 
-The accompanying data dictionary provides one entry for each of the 81 variables in the deposited dataset.
+The accompanying data dictionary provides one entry for each of the 81 variables in the analysis dataset.
 
 For each variable, it documents where applicable:
 
-- the original deposited variable name;
+- the original variable name;
 - a human-readable description;
 - data type;
 - measurement unit;
@@ -516,15 +516,15 @@ No manual editing of statistical results is required between scripts in the publ
 
 ## 21. Relationship between manuscript, dataset, and code
 
-The research package consists of three related components:
+The research workflow consists of three related components:
 
 **Manuscript**  
 Describes the study design, clinical interpretation, statistical methods, and reported results.
 
-**Deposited dataset**  
-Contains the analysis-ready variables required for reproduction of the public statistical analyses, subject to the access conditions determined by the KI Data Repository.
+**Analysis dataset**  
+Contains the analysis-ready variables required for reproduction of the statistical analyses.
 
 **Public analysis repository**  
-Contains the code required to transform the deposited dataset into analysis objects and reproduce the statistical analyses, tables, and figures supported by the released data.
+Contains the code required to transform the analysis dataset into analysis objects and reproduce the statistical analyses, tables, and figures supported by the analysis dataset.
 
 The secure source dataset and private preprocessing workflow remain outside the public repository because they contain information and processing steps that are not necessary for reproduction of the released analyses.
