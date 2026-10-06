@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the analysis-ready dataset and supporting analysis code for the study:
+This repository contains the analysis code and reproducibility documentation for the study:
 
 **Clinical predictors of genetic diagnoses in adults evaluated for inborn errors of immunity**
 
@@ -10,31 +10,24 @@ The study investigated clinical and laboratory characteristics associated with o
 
 The study cohort comprised 124 individuals who underwent genetic testing and met the study inclusion criteria. Of these, 55 received a molecular diagnosis and 69 did not.
 
-The deposited dataset contains the variables required to reproduce the principal descriptive analyses, the reproducible portion of the predictor-selection workflow, regression analyses, sensitivity analyses, and figures reported in the manuscript.
+The analysis dataset contains the variables required to reproduce the principal descriptive analyses, the reproducible portion of the predictor-selection workflow, regression analyses, sensitivity analyses, and figures reported in the manuscript.
 
-Direct and internal identifiers have been removed from the deposited dataset. Because the dataset contains detailed clinical information from a relatively small patient cohort, data access and reuse are subject to the conditions specified by the KI Data Repository.
+The analysis dataset is not included in this GitHub repository. The public analysis workflow begins with `data/gimpid_clean.csv`, which should be placed in the `data/` directory before running the analysis.
 
 ## Associated publication
 
-**Article:**  
-[Full citation to be added after publication]
-
-**DOI:**  
-[Article DOI]
-
-**Dataset DOI:**  
-[KI Data Repository DOI]
+**Article:** Manuscript under revision.
 
 **Analysis code:**  
-[GitHub repository URL]
+https://github.com/HannesLindahl/clinical-predictors-genetic-diagnosis-iei
 
-## Dataset
+## Analysis dataset
 
-The primary analysis dataset is:
+The analysis workflow uses:
 
 `data/gimpid_clean.csv`
 
-It contains:
+The analysis dataset contains:
 
 - **124 observations** (study participants)
 - **81 variables**
@@ -42,9 +35,9 @@ It contains:
 - **1 molecular diagnosis outcome variable**
 - **1 IUIS classification variable**
 
-Each row represents one study participant.
+Each row represents one study participant. No participant identifier is included in the analysis dataset.
 
-No participant identifier is included in the deposited dataset.
+The dataset contains detailed clinical information from a relatively small patient cohort and is therefore not distributed through this GitHub repository.
 
 ### Primary outcome
 
@@ -54,27 +47,23 @@ The primary outcome variable is:
 
 This indicates whether genetic testing resulted in a molecular diagnosis considered relevant to the participant's clinical phenotype.
 
-The analysis scripts create standardized analysis variables from the deposited source-variable names where required.
+The analysis scripts create standardized analysis variables from the source-variable names where required.
 
 ### Predictor variables
 
-The dataset includes demographic, clinical, infectious, immunological, autoimmune, inflammatory, malignancy-related, and laboratory variables evaluated in the study.
+The analysis dataset includes demographic, clinical, infectious, immunological, autoimmune, inflammatory, malignancy-related, and laboratory variables evaluated in the study.
 
-A detailed description of each variable, including coding, data type, units where applicable, and representation of missing values, is provided in the accompanying data dictionary:
-
-`data_dictionary.csv`
-
-[Update filename if the final data dictionary uses another name or format.]
+A separate data dictionary documents the variables, coding, data types, laboratory units where applicable, and representation of missing values.
 
 ## Data provenance and processing
 
-The deposited dataset is derived from the study's secure source data.
+The analysis dataset was derived from secure study source data.
 
-Source-data cleaning and preparation were performed in a private preprocessing workflow before creation of the repository dataset. This included removal of direct/internal identifiers, data-type harmonization, handling of source-specific laboratory notation, application of study eligibility criteria, and preparation of variables required for the analyses.
+Source-data cleaning and preparation were performed in a private preprocessing workflow before creation of the analysis dataset. This included removal of direct and internal identifiers, data-type harmonization, handling of source-specific laboratory notation, and preparation of variables required for the analyses.
 
-The private preprocessing code is not included in the public repository because it operates on source data that are not part of the public research package.
+The private preprocessing code is not included in this repository because it operates on source data that are not part of the public research package.
 
-The public analysis workflow begins with `data/gimpid_clean.csv`.
+The public reproducibility workflow begins with `data/gimpid_clean.csv`.
 
 A detailed description of the processing history, predictor screening, variable-selection workflow, statistical analyses, and reproducibility boundaries is provided in:
 
@@ -85,13 +74,13 @@ A detailed description of the processing history, predictor screening, variable-
 The analysis scripts are intended to be run sequentially:
 
 1. `01_prepare_analysis_data.R`  
-   Imports the deposited dataset, performs analysis-level recoding, defines the molecular diagnosis outcome and key analysis variables, and creates the derived analysis dataset.
+   Imports the analysis dataset, performs analysis-level recoding, defines the molecular diagnosis outcome and key analysis variables, and creates the derived analysis dataset.
 
 2. `02_descriptive_analysis.R`  
    Produces cohort summaries and descriptive analyses, including clinical manifestation domains and the clustered clinical-manifestation heatmap.
 
 3. `03_variable_selection.R`  
-   Reconstructs the domain-based predictor prioritization from the 79 eligible predictors available in the deposited dataset and documents the historical predictor-screening stages.
+   Reconstructs the domain-based predictor prioritization from the 79 eligible predictors available in the analysis dataset and documents the historical predictor-screening stages.
 
 4. `04_multivariable_analysis.R`  
    Fits the primary multivariable logistic regression model.
@@ -112,9 +101,9 @@ The analysis scripts are intended to be run sequentially:
    Produces the forest plot for the primary adjusted logistic regression model.
 
 10. `10_univariable_analyses.R`  
-    Performs the univariable predictor analyses, including prespecified use of Firth logistic regression for predictors requiring penalized estimation.
+    Performs the univariable predictor analyses, including Firth logistic regression for celiac disease and NRH/PSVD, consistent with the historical analysis.
 
-The scripts have been tested by running `01` through `10` sequentially from the deposited analysis dataset.
+The complete workflow (`01` through `10`) has been tested sequentially from a clean R session.
 
 ## Predictor screening and variable selection
 
@@ -128,21 +117,21 @@ Before the domain-based variable-selection procedure:
 
 This resulted in **79 eligible predictors**.
 
-The deposited dataset contains these 79 eligible predictors rather than all 109 variables considered during the historical preprocessing stage. Therefore, the exclusions that reduced the original 109 predictors to 79 are documented for provenance but cannot be independently recomputed from the deposited dataset.
+The analysis dataset contains these 79 eligible predictors rather than all 109 variables considered during the historical preprocessing stage. Therefore, the exclusions that reduced the original 109 predictors to 79 are documented for provenance but cannot be independently recomputed from the analysis dataset.
 
-The subsequent predictor-selection and statistical analyses based on the 79 eligible predictors are implemented in the public analysis code.
+The subsequent predictor-prioritization and statistical analyses based on the 79 eligible predictors are implemented in the public analysis code.
 
 Further details are provided in `PROCESSING_AND_REPRODUCIBILITY.md`.
 
 ## Missing data
 
-Missing values are represented as `NA`.
+Missing values are stored as blank fields in the CSV file and are read as `NA` by the analysis workflow.
 
 Missingness varies between variables. Predictor eligibility in the original analysis required no more than 20% missing observations.
 
 Regression analyses use complete observations for the variables included in the respective model. Consequently, the analysis sample size may differ between analyses.
 
-For descriptive construction of clinical manifestation domains, missing values in the relevant manifestation variables are handled according to the rules documented in the analysis code and `PROCESSING_AND_REPRODUCIBILITY.md`.
+For descriptive construction of clinical manifestation domains, missing values in the relevant manifestation variables are treated as absence for domain construction, as documented in the analysis code and `PROCESSING_AND_REPRODUCIBILITY.md`.
 
 ## Reproducing the analyses
 
@@ -150,75 +139,62 @@ The analysis requires R and the packages loaded by the individual analysis scrip
 
 To reproduce the analyses:
 
-1. Obtain access to the deposited dataset according to the access conditions specified by the KI Data Repository.
-2. Place `gimpid_clean.csv` in the `data/` directory.
-3. Start a clean R session in the repository root.
-4. Run scripts `01` through `10` sequentially.
+1. Place `gimpid_clean.csv` in the `data/` directory.
+2. Start a clean R session in the repository root.
+3. Run scripts `01` through `10` sequentially.
 
 Intermediate analysis objects are written to:
 
 `data/derived/`
 
-Figures and other generated outputs are written to the output directories specified by the scripts.
+Figures and other generated outputs are written to the output locations specified by the individual scripts.
 
-[Add exact R version/package environment instructions here if a lockfile, `sessionInfo()`, or package manifest is included in the final repository.]
+## Software environment
+
+All analyses were performed in R.
+
+The complete public analysis workflow (`01`–`10`) was tested sequentially from a clean R session using R version 4.5.0 (2025-04-11) on Windows 11 x64.
+
+The principal R packages attached during the analysis workflow were `dplyr` (1.1.4), `readr` (2.1.5), `tidyr` (1.3.1), `tibble` (3.3.0), `Matrix` (1.7-3), `glmnet` (5.0), `ggplot2` (4.0.3), and `logistf` (1.26.1). Additional package dependencies were loaded through these packages as required.
+
+A complete record of the R session and package versions after successful execution of the workflow is provided in:
+
+`sessionInfo.txt`
 
 ## Reproducibility scope
 
-The repository is designed to reproduce the analyses that can be performed from the deposited analysis dataset.
+This repository is designed to reproduce the analyses that can be performed from the analysis dataset.
 
-Some aspects of the complete research workflow necessarily precede the deposited dataset and are therefore documented rather than computationally reproduced. These include source-data extraction and cleaning, removal of identifiers, exclusions based on variables not retained in the release dataset, and other processing requiring access to the secure source data.
+Some aspects of the complete research workflow necessarily precede the analysis dataset and are therefore documented rather than computationally reproduced. These include source-data extraction and cleaning, removal of identifiers, exclusions based on variables not retained in the release dataset, and other processing requiring access to secure source data.
 
 The public analysis code does not require access to individual gene or disease labels that are not necessary for reproducing the reported predictor analyses.
 
-## Data access and confidentiality
+## Data confidentiality
 
-The dataset contains clinical research data from individuals evaluated for inborn errors of immunity. Although direct and internal identifiers have been removed, combinations of detailed clinical characteristics may remain sensitive.
+The analysis dataset contains clinical research data from individuals evaluated for inborn errors of immunity. Although direct and internal identifiers have been removed, combinations of detailed clinical characteristics may remain sensitive.
 
-Data access, permitted reuse, and any applicable disclosure controls are determined by the KI Data Repository and the conditions associated with the dataset record.
-
-**Access conditions:**  
-[To be completed following KI Data Repository assessment]
-
-Users of the dataset are responsible for complying with the applicable access conditions, ethical approvals, data-protection requirements, and terms of reuse.
+For this reason, the clinical dataset is not distributed through this GitHub repository.
 
 ## Ethics
 
-The study was conducted under the applicable ethical approval(s).
-
-**Ethical approval:**  
-[Insert approving authority and approval/reference number(s)]
+The study was approved by the Regional Ethical Review Board in Stockholm, Sweden, as part of the FUNGEN study (approval number 2011/116-31). An updated approval (2020-00125) was granted by the Swedish Ethical Review Authority.
 
 Further details are provided in the associated publication.
 
 ## Citation
 
-If you use this dataset or analysis code, please cite:
+The associated manuscript is currently under revision. Publication and dataset citation information will be added when available.
 
-**Article:**  
-[Full article citation]
+When referring specifically to the analysis code, please use:
 
-**Dataset:**  
-[Dataset citation supplied by the KI Data Repository]
-
-**Code:**  
-[GitHub citation/DOI if applicable]
+https://github.com/HannesLindahl/clinical-predictors-genetic-diagnosis-iei
 
 ## License and reuse
 
-**Dataset reuse terms:**  
-[To be specified by the KI Data Repository]
+No separate license for the analysis code has yet been specified.
 
-**Code license:**  
-[Insert selected code license]
-
-The licensing of the analysis code does not override restrictions or conditions applying to the clinical dataset.
+The absence of a code license should not be interpreted as permission to access or reuse the underlying clinical research data. The clinical dataset is not included in this repository.
 
 ## Contact
 
-For questions regarding the study or dataset:
-
-[Name]  
-[Department / research group]  
-Karolinska Institutet  
-[Institutional email]
+For questions regarding the study or analysis code, please contact the corresponding authors through the contact information provided in the associated publication.
