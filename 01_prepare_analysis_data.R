@@ -16,8 +16,9 @@
 #   data/derived/analysis_data.rds
 #
 # Notes:
-#   The repository dataset is assumed to have already undergone source-data
-#   cleaning and de-identification before deposition.
+#   The analysis dataset is assumed to have already undergone source-data
+#   cleaning and removal of direct/internal identifiers before use by this
+#   public analysis workflow.
 #
 #   This script performs analysis-level recoding only. It does not perform
 #   variable selection, statistical modelling, or produce manuscript outputs.
@@ -36,15 +37,10 @@ library(readr)
 # 2. Import repository dataset
 # ------------------------------------------------------------------------------
 
-# TEMPORARY:
-# During development, replace this path with the current full cleaned working
-# dataset. The final repository will read the deposited dataset here.
-
-
-dat <- read_csv("gimpid_clean.csv",
+dat <- read_csv(
+  "data/gimpid_clean.csv",
   show_col_types = FALSE
 )
-
 
 # ------------------------------------------------------------------------------
 # 3. Basic integrity checks
